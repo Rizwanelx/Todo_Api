@@ -24,6 +24,26 @@ router.post('/', (req, res) => {
 
 
 
+router.delete('/:id', (req, res) => {
+    const todo = new Todo(req.body);
+
+    todo.findByIdAndRemove(req.params.id);
+
+    if (!todo) return res.status(404).send('The todo with the given ID was not found.');
+
+    res.send(todo);
+});
+app.put("/:id", async(request, response) => {
+    try {
+        var todo = await Todo.findById(request.params.id).exec();
+        todo.set(request.body);
+        var result = await person.save();
+        response.send(result);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
 
 router.get("/:id", async(request, response) => {
     try {
@@ -33,29 +53,6 @@ router.get("/:id", async(request, response) => {
         response.status(500).send(error);
     }
 });
-router.put("/:id", async(request, response) => {
-    try {
-        var todo = await Todo.findById(request.params.id);
-        todo.set(request.body);
-        var result = await todo.save();
-        response.send(result);
-    } catch (error) {
-        response.status(500).send(error);
-    }
-});
-
-router.delete("/:id", async(request, response) => {
-    try {
-        var todo = await Todo.deleteOne({ _id: request.params.id });
-        response.send(todo);
-    } catch (error) {
-        response.status(500).send(error);
-    }
-});
-
-
-
-
 
 
 module.exports = router;

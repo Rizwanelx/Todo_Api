@@ -24,15 +24,25 @@ router.post('/', (req, res) => {
 
 
 
+// router.delete('/:id', (req, res) => {
+//     const todo = new Todo(req.body);
 
-router.get("/:id", async(request, response) => {
+//     todo.findByIdAndRemove(req.params.id);
+
+//     if (!todo) return res.status(404).send('The todo with the given ID was not found.');
+
+//     res.send(todo);
+// });
+
+router.delete("/person/:id", async(request, response) => {
     try {
-        var todo = await Todo.findById(request.params.id).exec();
+        var todo = await Todo.deleteOne({ _id: request.params.id });
         response.send(todo);
     } catch (error) {
         response.status(500).send(error);
     }
 });
+
 router.put("/:id", async(request, response) => {
     try {
         var todo = await Todo.findById(request.params.id);
@@ -44,18 +54,15 @@ router.put("/:id", async(request, response) => {
     }
 });
 
-router.delete("/:id", async(request, response) => {
+
+router.get("/:id", async(request, response) => {
     try {
-        var todo = await Todo.deleteOne({ _id: request.params.id });
+        var todo = await Todo.findById(request.params.id).exec();
         response.send(todo);
     } catch (error) {
         response.status(500).send(error);
     }
 });
-
-
-
-
 
 
 module.exports = router;
